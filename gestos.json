@@ -1,0 +1,53 @@
+{
+  "_comentario": "Configuracion de gestos para la mano izquierda. Cada gesto detecta la distancia entre el pulgar (landmark 4) y otro dedo. Los dedos disponibles son: indice=8, medio=12, anular=16, menique=20. El tipo puede ser 'hotkey' (combinacion de teclas) o 'comando' (ejecutar app o script).",
+  "_teclas_validas": "ctrl, alt, shift, win, tab, space, enter, esc, f1-f12, a-z, 0-9, left, right, up, down, home, end, pageup, pagedown, delete, backspace",
+  "umbral": 0.04,
+  "gestos": [
+    {
+      "id": "gesto_1",
+      "nombre": "Alt + Tab",
+      "descripcion": "Cambiar ventana activa",
+      "dedo": 8,
+      "tipo": "hotkey",
+      "accion": [
+        "alt",
+        "tab"
+      ],
+      "activo": true
+    },
+    {
+      "id": "gesto_2",
+      "nombre": "Win + D",
+      "descripcion": "Mostrar escritorio",
+      "dedo": 12,
+      "tipo": "hotkey",
+      "accion": [
+        "win",
+        "d"
+      ],
+      "activo": true
+    },
+    {
+      "id": "gesto_3",
+      "nombre": "Captura de pantalla",
+      "descripcion": "Tomar screenshot",
+      "dedo": 16,
+      "tipo": "hotkey",
+      "accion": [
+        "win",
+        "shift",
+        "s"
+      ],
+      "activo": true
+    },
+    {
+      "id": "gesto_4",
+      "nombre": "Abrir Explorador",
+      "descripcion": "Abrir el explorador de archivos",
+      "dedo": 20,
+      "tipo": "comando",
+      "accion": "explorer.exe",
+      "activo": true
+    }
+  ]
+}
