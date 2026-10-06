@@ -2,6 +2,12 @@
 
 Plan para generar **un solo instalador** (`Gestos-Setup-1.0.exe`) que incluya ambas aplicaciones del proyecto.
 
+> **¿Solo quieres compilarlo?** → ve directo a
+> **[`como-compilar-windows.md`](como-compilar-windows.md)**, la guía práctica
+> paso a paso (requisitos, comandos, troubleshooting). Este archivo es el
+> plan/original con el análisis completo, el porqué de cada decisión y el
+> progreso.
+
 ## Objetivo
 
 ```
@@ -422,7 +428,8 @@ Tesis-Proyecto/
 │   ├── gestos_gui.spec ✅
 │   └── installer.nsi   ✅
 ├── docs/
-│   └── empaquetado-windows.md   ← este archivo
+│   ├── como-compilar-windows.md   ← guía práctica: cómo compilarlo
+│   └── empaquetado-windows.md     plan, análisis y progreso (este archivo)
 │
 ├── dist/               (generado, en .gitignore)
 │   ├── prototipo\          Gestos.exe + _internal\
