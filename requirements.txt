@@ -1,0 +1,20 @@
+# ── Requisito duro ──────────────────────────────────────────────
+# mediapipe==0.10.9 solo tiene wheel para Python 3.8–3.11 → usar py -3.10
+mediapipe==0.10.9
+
+# mediapipe 0.10.9 está compilado contra NumPy 1.x:
+# con NumPy 2 revienta con "module compiled using NumPy 1.x cannot be run in NumPy 2.x"
+numpy<2
+
+# OJO: NO usar `opencv-python`. mediapipe ya depende de opencv-contrib-python
+# y tener los dos instala dos cv2 en pelea. Se pinea <4.12 porque a partir de
+# 4.12 el paquete exige numpy>=2 (incompatible con lo de arriba).
+# Tampoco usar el "-headless": el código usa cv2.imshow.
+opencv-contrib-python==4.11.0.86
+
+# ── Control de escritorio ───────────────────────────────────────
+pyautogui
+mouse
+
+# ── Solo para build (Fase 2) ────────────────────────────────────
+pyinstaller

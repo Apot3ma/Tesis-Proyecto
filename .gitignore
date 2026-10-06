@@ -1,2 +1,14 @@
 /entorno_virtual
 /.vscode
+
+# ── Build (Fase 2/3) ─────────────────────────────────
+/dist/
+/build_tmp/
+/venv/
+
+# PyInstaller genera esto si se corre sin --workpath
+/*.exe
+
+# Logs en desarrollo
+/gestos.log
+__pycache__/

@@ -1,10 +1,20 @@
+# ════════════════════════════════════════════════════
+#  Logging ANTES que nada
+# ════════════════════════════════════════════════════
+# El .exe va sin consola: si tkinter u otro import falla al arrancar,
+# el error se perdería en el vacío. Se configura el log primero.
+# gestos_util solo importa stdlib, así que es seguro ponerlo al inicio.
+from gestos_util import configurar_logging, ruta_config
+
+LOG_FILE = configurar_logging()
+# Ruta absoluta compartida con Gestos.exe (%APPDATA%\Gestos\gestos.json)
+CONFIG_FILE = ruta_config()
+
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 import json
 import os
 import subprocess
-
-CONFIG_FILE = "gestos.json"
 
 DEDOS = {
     8:  "Índice",
@@ -37,12 +47,23 @@ def cargar_config():
     if not os.path.exists(CONFIG_FILE):
         messagebox.showerror("Error", f"No se encontró {CONFIG_FILE}")
         return None
-    with open(CONFIG_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)
+    try:
+        with open(CONFIG_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except json.JSONDecodeError as e:
+        # Si el archivo está corrupto no se sobreescribe: se informa y ya
+        messagebox.showerror(
+            "Configuración inválida",
+            f"No se pudo leer {CONFIG_FILE}:\n{e}\n\n"
+            f"El archivo no fue modificado.\n"
+            f"Detalles en el log: {LOG_FILE}",
+        )
+        return None
 
 def guardar_config(data):
     with open(CONFIG_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
+    print(f"[CONFIG] Guardado en {CONFIG_FILE}")
 
 class GestosApp(tk.Tk):
     def __init__(self):
@@ -374,8 +395,13 @@ class GestosApp(tk.Tk):
     def _guardar(self):
         self.config_data["umbral"] = round(self.umbral_var.get(), 4)
         guardar_config(self.config_data)
-        self.status_var.set("✓ Configuración guardada en gestos.json")
-        messagebox.showinfo("Guardado", "gestos.json actualizado correctamente.")
+        self.status_var.set(f"✓ Guardado en {CONFIG_FILE}")
+        messagebox.showinfo(
+            "Guardado",
+            "gestos.json actualizado correctamente.\n\n"
+            f"{CONFIG_FILE}\n\n"
+            "Cierra y vuelve a abrir Gestos para que tome los cambios.",
+        )
 
     # ────────────────────────────────────────────────
     # Helper botón

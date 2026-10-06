@@ -1,3 +1,20 @@
+# ════════════════════════════════════════════════════
+#  Logging ANTES que nada
+# ════════════════════════════════════════════════════
+# El .exe va sin consola: si un import de abajo falla (DLL faltante,
+# mediapipe roto, etc.) el error se perdería en el vacío. Se configura
+# el log primero para que TODO quede registrado en gestos.log.
+# gestos_util solo importa stdlib, así que es seguro ponerlo al inicio.
+from gestos_util import aviso_consola, configurar_logging, ruta_config
+
+LOG_FILE = configurar_logging()
+# Ruta absoluta: el CWD al lanzar desde un acceso directo NO es la
+# carpeta del .exe. Ver gestos_util.ruta_config()
+CONFIG_FILE = ruta_config()
+
+# ════════════════════════════════════════════════════
+#  Dependencias
+# ════════════════════════════════════════════════════
 import mediapipe as mp
 import cv2
 import mouse
@@ -5,13 +22,13 @@ import ctypes
 import math
 import json
 import os
+import sys
 import pyautogui
 import subprocess
 
 # ════════════════════════════════════════════════════
 #  Carga de configuracion de gestos
 # ════════════════════════════════════════════════════
-CONFIG_FILE = "gestos.json"
 
 def cargar_gestos():
     if not os.path.exists(CONFIG_FILE):
@@ -22,6 +39,8 @@ def cargar_gestos():
     gestos = [g for g in data.get("gestos", []) if g.get("activo", True)]
     umbral = data.get("umbral", 0.05)
     print(f"[GESTOS] {len(gestos)} gesto(s) activos cargados. Umbral: {umbral}")
+    print(f"[CONFIG] {CONFIG_FILE}")
+    print(f"[LOG]    {LOG_FILE}")
     return gestos, umbral
 
 gestos_config, UMBRAL_GESTOS = cargar_gestos()
@@ -69,8 +88,15 @@ cap.set(3, 640)
 cap.set(4, 480)
 
 if not cap.isOpened():
-    print("Error: no se pudo abrir la cámara")
-    exit(1)
+    print("Error: no se pudo abrir la cámara (índice 1, CAP_DSHOW). Ver gestos.log")
+    aviso_consola(
+        "No se pudo abrir la cámara.\n\n"
+        "Verifica que esté conectada y que otra aplicación no la esté usando.\n\n"
+        "Detalle técnico en:\n%APPDATA%\\Gestos\\gestos.log"
+    )
+    # sys.exit, NO exit: `exit`/`quit` los inyecta el módulo `site`,
+    # que no existe dentro de un .exe congelado → NameError en runtime.
+    sys.exit(1)
 
 # ════════════════════════════════════════════════════
 #  Constantes
